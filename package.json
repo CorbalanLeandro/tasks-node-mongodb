@@ -1,0 +1,29 @@
+{
+  "name": "tasks-node-mongodb",
+  "version": "1.0.0",
+  "description": "An app where you can create an user and save your tasks..",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CorbalanLeandro/tasks-node-mongodb.git"
+  },
+  "keywords": [],
+  "author": "Leandro Corbalán",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CorbalanLeandro/tasks-node-mongodb/issues"
+  },
+  "homepage": "https://github.com/CorbalanLeandro/tasks-node-mongodb#readme",
+  "dependencies": {
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.10.3",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
