@@ -1,10 +1,112 @@
 <nav class="navbar navbar-dark" id="navbar">
-    <div class="container">
-        <a class="navbar-brand" href="/">Tasks</a>
+    <div class="container justify-content-end">
         <ul class="navbar-nav">
+            <% if (user) { %>
             <li class="nav-item active">
-                <a class="nav-link" href="#">Login</a>
+                <div class="dropdown">
+                    <a class="nav-link" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%= user.firstName %></a>
+                    <div class="dropdown-menu position-absolute" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="/users/logOut">Cerrar sesión</a>
+                    </div>
+                </div>
             </li>
+            <% } else { %>
+            <li class="nav-item active">
+                <a class="nav-link" data-toggle="modal" href="#login-modal">Login</a>
+            </li>
+            <% }%>
         </ul>
     </div>
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal fade login-modal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal-width">
+                <div class="modal-body">
+                    <div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form class="mt-4" action="/users/singIn" method="POST">
+                        <div class="text-tomato">
+                            <label for="userOrEmail">User or Email</label>
+                        </div>
+                        <div>
+                            <input type="text" name="userOrEmail" id="">
+                        </div>
+                        <div class="text-tomato">
+                            <label for="password">Password</label>
+                        </div>
+                        <div>
+                            <input type="password" name="password" id="">
+                        </div>
+                        <div>
+                            <input type="checkbox" name="rememberme" id="">
+                            <label for="rememberme">Rememberme</label>
+                        </div>
+                        <div class="mt-4">
+                            <button class="btn-block bg-tomato text-light border-tomato" type="submit">Sing In</button>
+                            <button class="btn-block bg-tomato text-light border-tomato" type="button" data-toggle="modal" data-target="#register-modal">Sing up</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Register modal -->
+    <div id="register-modal" class="modal fade login-modal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal-width">
+                <div class="modal-body">
+                    <div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form class="mt-4" action="/users/singUp" method="POST">
+                        <div class="text-tomato">
+                            <label for="userName">User name</label>
+                        </div>
+                        <div>
+                            <input type="text" name="userName" id="">
+                        </div>
+                        <div class="text-tomato">
+                            <label for="firstName">First name</label>
+                        </div>
+                        <div>
+                            <input type="text" name="firstName" id="">
+                        </div>
+                        <div class="text-tomato">
+                            <label for="lastName">Last name</label>
+                        </div>
+                        <div>
+                            <input type="text" name="lastName" id="">
+                        </div>
+                        <div class="text-tomato">
+                            <label for="email">Email</label>
+                        </div>
+                        <div>
+                            <input type="email" name="email" id="">
+                        </div>
+                        <div class="text-tomato">
+                            <label for="password">Password</label>
+                        </div>
+                        <div>
+                            <input type="password" name="password" id="">
+                        </div>
+                        <div class="text-tomato">
+                            <label for="password">Confirm password</label>
+                        </div>
+                        <div>
+                            <input type="password" name="confirmPassword" id="">
+                        </div>
+                        <div class="mt-4">
+                            <button class="btn-block bg-tomato text-light border-tomato" type="submit">Sing up</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </nav>

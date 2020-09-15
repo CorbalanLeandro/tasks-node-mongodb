@@ -13,29 +13,34 @@
                 </form>
             </div>
             <div class="col-12 col-lg-7">
-                <div class="card-title text-light border border-light rounded bg-tomato mt-4 mt-md-0">
-                    <h3 class="p-1">Task List</h3>
+                <div class="card-title text-light border border-light rounded bg-tomato mt-4 mt-lg-0">
+                    <h3 class="p-1">To do List</h3>
                 </div>
                 <article class="d-flex p-1 rounded justify-content-between mt-2 bg-light">
-                    <h4>Correr</h4>
+                    <div class="flex-fill dropdown">
+                        <a class="d-block task-a-dropdown" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Correr</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <p>Salir a correr por la mañana</p>
+                        </div>
+                    </div>
                     <div class="d-flex justify-content-around">
                         <div>
                             <form action="">
-                                <button type="submit">
+                                <button class="bg-tomato task-button" type="submit">
                                     <i class="fas fa-check-square"></i>
                                 </button>
                             </form>
                         </div>
                         <div>
                             <form action="">
-                                <button type="submit">
+                                <button class="bg-tomato task-button" type="submit">
                                     <i class="fas fa-pen-square"></i>
                                 </button>
                             </form>
                         </div>
                         <div>
                             <form action="">
-                                <button type="submit">
+                                <button class="bg-tomato task-button" type="submit">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </form>

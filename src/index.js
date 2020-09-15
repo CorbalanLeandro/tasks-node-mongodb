@@ -2,6 +2,9 @@ const morgan = require('morgan');
 const path = require('path');
 const mongoose = require('mongoose');
 const express = require('express');
+const session = require('express-session');
+const cookie = require("cookie-parser");
+const accessMiddleware = require('./middlewares/aplication/accessMiddleware');
 
 const app = express();
 
@@ -9,6 +12,14 @@ const app = express();
 app.use(express.static(path.resolve(__dirname, '..', 'public'))); //public data
 app.use(express.urlencoded({extended: false})); //req.body
 app.use(morgan('dev'));
+app.use(session({
+    secret: "This is the secret message for session",
+    resave : true,
+    saveUninitialized : true
+}));
+app.use(cookie());
+app.use(accessMiddleware);
+
 
 //Connecting to db
 mongoose.connect('mongodb://localhost/tasks-node-mongodb', {useNewUrlParser: true, useUnifiedTopology:true})
@@ -17,9 +28,11 @@ mongoose.connect('mongodb://localhost/tasks-node-mongodb', {useNewUrlParser: tru
 
 //Importing routes
 const webRoutes = require('./routes/webRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 //Using routes
 app.use(webRoutes);
+app.use('/users', userRoutes);
 
 //Settings
 app.set('view engine', 'ejs'); //view engine
