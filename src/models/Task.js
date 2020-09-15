@@ -2,11 +2,21 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const TaskSchema = new Schema({
-    title: String,
-    description: String,
+    title: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    userId: {
+        type: String,
+        required: true
+    },
     status: {
-        type:Number,
-        default: 0
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true

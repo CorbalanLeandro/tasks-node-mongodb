@@ -5,6 +5,7 @@ const express = require('express');
 const session = require('express-session');
 const cookie = require("cookie-parser");
 const accessMiddleware = require('./middlewares/aplication/accessMiddleware');
+const methodOverride = require('method-override');
 
 const app = express();
 
@@ -19,20 +20,24 @@ app.use(session({
 }));
 app.use(cookie());
 app.use(accessMiddleware);
+app.use(methodOverride('_method'));
+
 
 
 //Connecting to db
-mongoose.connect('mongodb://localhost/tasks-node-mongodb', {useNewUrlParser: true, useUnifiedTopology:true})
+mongoose.connect('mongodb://localhost/tasks-node-mongodb', {useNewUrlParser: true, useUnifiedTopology:true, useCreateIndex: true})
     .then(db => console.log('Database connected'))
     .catch(err => console.error(err))
 
 //Importing routes
 const webRoutes = require('./routes/webRoutes');
 const userRoutes = require('./routes/userRoutes');
+const taskRoutes = require('./routes/taskRoutes');
 
 //Using routes
 app.use(webRoutes);
 app.use('/users', userRoutes);
+app.use('/tasks', taskRoutes);
 
 //Settings
 app.set('view engine', 'ejs'); //view engine

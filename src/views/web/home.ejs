@@ -2,13 +2,14 @@
     <%- include ('../partials/navbar') %>
     <main class="container mt-3">
         <section class="row m-2">
+            <% if (user) { %>
             <div class="col-12 col-lg-5">
                 <div class="card-title text-light border border-light rounded bg-tomato">
                     <h3 class="p-1">New Task</h3>
                 </div>
-                <form action="">
+                <form action="/tasks/addTask/<%= user._id %> " method="POST">
                     <input class="form-control mb-1" type="text" name="title" id="" placeholder="Write the new task title">
-                    <textarea class="form-control mb-1" name="" id="" cols="30" rows="5" placeholder="Write the task description"></textarea>
+                    <textarea class="form-control mb-1" name="description" id="" cols="30" rows="5" placeholder="Write the task description"></textarea>
                     <button class="btn border border-light bg-tomato btn-block text-white" type="submit">Save</button>
                 </form>
             </div>
@@ -16,38 +17,73 @@
                 <div class="card-title text-light border border-light rounded bg-tomato mt-4 mt-lg-0">
                     <h3 class="p-1">To do List</h3>
                 </div>
-                <article class="d-flex p-1 rounded justify-content-between mt-2 bg-light">
-                    <div class="flex-fill dropdown">
-                        <a class="d-block task-a-dropdown" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Correr</a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            <p>Salir a correr por la mañana</p>
+                <% if (userTasks.length > 0) { %>
+                    <% for(let i = 0 ; i < userTasks.length ; i++){ %>
+                        <article class="d-flex p-1 rounded justify-content-between align-items-center mt-2 <%= userTasks[i].status ? 'bg-checked': 'bg-light' %>">
+                            <div class="flex-fill dropdown">
+                                <a class="d-block task-a-dropdown text-break <%= userTasks[i].status ? 'checked': null %>" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%= userTasks[i].title %> </a>
+                                <div class="mt-3 dropdown-menu <%= userTasks[i].status ? 'bg-checked': 'bg-light' %>" aria-labelledby="dropdownMenuLink">
+                                    <p class="text-break "><%= userTasks[i].description %> </p>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-around">
+                                <div>
+                                    <form action="/tasks/check/<%= userTasks[i]._id %>?_method=PUT" method="POST">
+                                        <button class="bg-tomato task-button" type="submit">
+                                            <i class="fas fa-check-square"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div>                                    
+                                    <button class="bg-tomato task-button" type="button" data-toggle="modal" data-target="#modal<%= i %>">
+                                        <i class="fas fa-pen-square"></i>
+                                    </button>
+                                    <div class="modal fade" id="modal<%= i %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content p-2 bg-gradient">
+                                                <div class="card-title text-light border border-light rounded bg-tomato">
+                                                    <h3 class="p-1">Editting Task</h3>
+                                                </div>
+                                                <form action="/tasks/editTask/<%= userTasks[i]._id %>?_method=PUT" method="POST">
+                                                    <input class="form-control mb-1" type="text" name="title" id="" value="<%= userTasks[i].title %>">
+                                                    <textarea class="form-control mb-1" name="description" id="" cols="30" rows="5"><%= userTasks[i].description %></textarea>
+                                                    <button class="btn border border-light bg-tomato btn-block text-white" type="submit">Save</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>                                 
+                                </div>
+                                <div>
+                                    <form action="/tasks/deleteTask/<%= userTasks[i]._id %>?_method=DELETE" method="POST">
+                                        <button class="bg-tomato task-button" type="submit">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </article>
+                    <% } %>                
+                <% } else { %> 
+                    <article class="d-flex p-1 rounded justify-content-between mt-2 bg-light">
+                        <div class="flex-fill dropdown">
+                            <a class="d-block task-a-dropdown" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">You don't hace tasks</a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <p>You can create your tasks and they'll display here!</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="d-flex justify-content-around">
-                        <div>
-                            <form action="">
-                                <button class="bg-tomato task-button" type="submit">
-                                    <i class="fas fa-check-square"></i>
-                                </button>
-                            </form>
-                        </div>
-                        <div>
-                            <form action="">
-                                <button class="bg-tomato task-button" type="submit">
-                                    <i class="fas fa-pen-square"></i>
-                                </button>
-                            </form>
-                        </div>
-                        <div>
-                            <form action="">
-                                <button class="bg-tomato task-button" type="submit">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </article>
+                    </article>
+                <% }%>                   
             </div>
+            <% } else { %>
+            <div class="d-flex w-100 justify-content-center">
+                <div class="jumbotron jumbotron-fluid bg-jumbo">
+                    <div class="container">
+                        <h1 class="display-4">Please, sign in to use this app.</h1>
+                        <p class="lead">If you don't hace an account, you can create one for free!</p>
+                    </div>
+                </div>
+            </div>
+            <% } %>
         </section>        
     </main> 
 
