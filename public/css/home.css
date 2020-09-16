@@ -29,7 +29,7 @@ body{
     text-decoration: line-through;
 }
 .bg-checked{
-    background-color: grey;
+    background-color: lightgreen;
 }
 .text-break{
     word-break: break-word;

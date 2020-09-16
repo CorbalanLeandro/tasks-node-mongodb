@@ -33,11 +33,13 @@ mongoose.connect('mongodb://localhost/tasks-node-mongodb', {useNewUrlParser: tru
 const webRoutes = require('./routes/webRoutes');
 const userRoutes = require('./routes/userRoutes');
 const taskRoutes = require('./routes/taskRoutes');
+const apiUserRoutes = require('./routes/api/apiUserRoutes')
 
 //Using routes
 app.use(webRoutes);
 app.use('/users', userRoutes);
 app.use('/tasks', taskRoutes);
+app.use('/api/users', apiUserRoutes);
 
 //Settings
 app.set('view engine', 'ejs'); //view engine
