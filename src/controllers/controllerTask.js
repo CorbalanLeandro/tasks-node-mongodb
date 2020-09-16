@@ -27,9 +27,9 @@ module.exports = {
     },
     update: async (req, res) => {
 
-        const { title, description } = req.body;
-        if ((title.trim()).length > 2 && (description.trim()).length > 2){
-            await Task.findByIdAndUpdate(req.params.id, req.body);
+        const { editTitle, editDescription } = req.body;
+        if ((editTitle.trim()).length > 2 && (editDescription.trim()).length > 2){
+            await Task.findByIdAndUpdate(req.params.id, { title: editTitle, description: editDescription });
             res.redirect('/');
         } else {
             let error = 'Make segure that the title and the description are longer than 2 caracters';

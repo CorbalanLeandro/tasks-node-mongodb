@@ -15,7 +15,7 @@
                 <div class="card-title text-light border border-light rounded bg-tomato">
                     <h3 class="p-1">New Task</h3>
                 </div>
-                <form action="/tasks/addTask/<%= user._id %> " method="POST">
+                <form class="addTaskForm" action="/tasks/addTask/<%= user._id %> " method="POST">
                     <input class="form-control mb-1" type="text" name="title" id="" placeholder="Write the new task title">
                     <textarea class="form-control mb-1" name="description" id="" cols="30" rows="5" placeholder="Write the task description"></textarea>
                     <button class="btn border border-light bg-tomato btn-block text-white" type="submit">Save</button>
@@ -36,7 +36,7 @@
                             </div>
                             <div class="d-flex justify-content-around">
                                 <div>
-                                    <form action="/tasks/check/<%= userTasks[i]._id %>?_method=PUT" method="POST">
+                                    <form class="checkTaskForm" action="/tasks/check/<%= userTasks[i]._id %>?_method=PUT" method="POST">
                                         <button class="bg-tomato task-button" type="submit">
                                             <i class="fas fa-check-square"></i>
                                         </button>
@@ -52,9 +52,9 @@
                                                 <div class="card-title text-light border border-light rounded bg-tomato">
                                                     <h3 class="p-1">Editting Task</h3>
                                                 </div>
-                                                <form action="/tasks/editTask/<%= userTasks[i]._id %>?_method=PUT" method="POST">
-                                                    <input class="form-control mb-1" type="text" name="title" id="" value="<%= userTasks[i].title %>">
-                                                    <textarea class="form-control mb-1" name="description" id="" cols="30" rows="5"><%= userTasks[i].description %></textarea>
+                                                <form class="editTaskForm" action="/tasks/editTask/<%= userTasks[i]._id %>?_method=PUT" method="POST">
+                                                    <input class="form-control mb-1" type="text" name="editTitle" id="" value="<%= userTasks[i].title %>">
+                                                    <textarea class="form-control mb-1" name="editDescription" id="" cols="30" rows="5"><%= userTasks[i].description %></textarea>
                                                     <button class="btn border border-light bg-tomato btn-block text-white" type="submit">Save</button>
                                                 </form>
                                             </div>
@@ -62,7 +62,7 @@
                                     </div>                                 
                                 </div>
                                 <div>
-                                    <form action="/tasks/deleteTask/<%= userTasks[i]._id %>?_method=DELETE" method="POST">
+                                    <form class="deleteTaskForm" action="/tasks/deleteTask/<%= userTasks[i]._id %>?_method=DELETE" method="POST">
                                         <button class="bg-tomato task-button" type="submit">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>

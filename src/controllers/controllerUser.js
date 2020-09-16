@@ -2,19 +2,27 @@ const bcryptjs = require('bcryptjs');
 const User = require('../models/User');
 
 module.exports = {
+
     create: async (req, res) =>{
 
         const { userName, firstName, lastName, email, password, confirmPassword } = req.body;
         const emailRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+        let usersInDb = await User.find();
+                
         if((userName.trim()).length > 2 && (firstName.trim()).length > 2 && (lastName.trim()).length > 2 && password == confirmPassword && (password.trim()).length >= 8 && emailRegex.test(email)){
-            let user = new User(req.body);
-            user.password = bcryptjs.hashSync(req.body.password, 10);//hashing password
-            await user.save(err => console.error(err))
-            res.redirect('/');
+            userToMatch = usersInDb.find(function (user){ if(user.userName == userName.trim() || user.email == email){ return user }})
+            if(!userToMatch){
+                let user = new User(req.body);
+                user.password = bcryptjs.hashSync(req.body.password, 10);//hashing password
+                await user.save(err => console.error(err));
+                res.redirect('/');
+            } else {
+                let error = 'There was an error on the registration';
+                res.render('./web/home', { error }); 
+            }
         } else {
             let error = 'There was an error on the registration';
-            res.render('./web/home', { error });
-            
+            res.render('./web/home', { error });            
         }   
 
     },
@@ -28,7 +36,7 @@ module.exports = {
                     {email: new RegExp(`^${userOrEmail}$`, 'i')}
                 ]
         })   
-        if(userToLogin && bcryptjs.compareSync(req.body.password, userToLogin.password)){
+        if(userToLogin && bcryptjs.compareSync(req.body.loginPassword, userToLogin.password)){
             userToLogin.password = null;
             req.session.user = userToLogin;
             if(req.body.rememberme){
@@ -42,8 +50,10 @@ module.exports = {
 
     },
     logOut: (req, res) =>{
+
         req.session.destroy();
         res.cookie('email', null, { maxAge: -1 });
         res.redirect('/');
+
     }
 }   
