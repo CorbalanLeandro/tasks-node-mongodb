@@ -6,7 +6,7 @@ module.exports = {
 
         const { userName, firstName, lastName, email, password, confirmPassword } = req.body;
         const emailRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-        if(userName.length > 2 && firstName.length > 2 && lastName.length > 2 && password == confirmPassword && password.length >= 8 && emailRegex.test(email)){
+        if((userName.trim()).length > 2 && (firstName.trim()).length > 2 && (lastName.trim()).length > 2 && password == confirmPassword && (password.trim()).length >= 8 && emailRegex.test(email)){
             let user = new User(req.body);
             user.password = bcryptjs.hashSync(req.body.password, 10);//hashing password
             await user.save(err => console.error(err))
@@ -14,6 +14,7 @@ module.exports = {
         } else {
             let error = 'There was an error on the registration';
             res.render('./web/home', { error });
+            
         }   
 
     },

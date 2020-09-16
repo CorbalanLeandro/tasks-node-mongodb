@@ -4,7 +4,7 @@ module.exports = {
     create: async (req, res) => {
 
         const { title, description } = req.body;
-        if (title.length > 2 && description.length > 2){
+        if ((title.trim()).length > 2 && (description.trim()).length > 2){
             let newTask = new Task(req.body);  
             newTask.userId = req.params.userId;      
             await newTask.save(err => console.error(err));
@@ -28,7 +28,7 @@ module.exports = {
     update: async (req, res) => {
 
         const { title, description } = req.body;
-        if (title.length > 2 && description.length > 2){
+        if ((title.trim()).length > 2 && (description.trim()).length > 2){
             await Task.findByIdAndUpdate(req.params.id, req.body);
             res.redirect('/');
         } else {
