@@ -1,5 +1,5 @@
 const path = require('path');
-const Task = require('../models/Task');
+const Task = require(path.resolve(__dirname + '../../models/Task'));
 
 module.exports = {
     home: async (req, res) =>{

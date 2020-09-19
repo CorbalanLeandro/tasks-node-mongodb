@@ -1,4 +1,5 @@
-const User = require('../../models/User');
+const path = require('path');
+const User = require(path.resolve(__dirname + '../../../models/User'));
 
 
 module.exports = async (req,res,next) => {

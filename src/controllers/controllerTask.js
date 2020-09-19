@@ -1,19 +1,22 @@
-const Task = require('../models/Task');
+const path = require('path');
+const Task = require(path.resolve(__dirname + '../../models/Task'));
+const { validationResult } = require('express-validator');
 
 module.exports = {
     create: async (req, res) => {
 
+        const errors = validationResult(req);
         const { addTaskTitle, addTaskDescription } = req.body;
-        if ((addTaskTitle.trim()).length > 2 && (addTaskDescription.trim()).length > 2){
+        if ( errors.isEmpty() ){
             const newTask = new Task({ title: addTaskTitle, description: addTaskDescription });  
             newTask.userId = req.params.userId;      
-            await newTask.save(err => console.error(err));
+            await newTask.save();
             res.redirect('/');
         } else {
-            const error = 'Make segure that the title and the description are longer than 2 caracters';
+            //return res.send(errors.errors)
             const loggedUser = req.session.user
-            const userTasks = await Task.find({userId: loggedUser._id})
-            res.render('./web/home', {userTasks, error});
+            const userTasks = await Task.find({ userId: loggedUser._id })
+            res.render('./web/home', { userTasks, errors: errors.errors });
         }
         
     },
@@ -27,15 +30,15 @@ module.exports = {
     },
     update: async (req, res) => {
 
+        const errors = validationResult(req);
         const { editTaskTitle, editTaskDescription } = req.body;
-        if ((editTaskTitle.trim()).length > 2 && (editTaskDescription.trim()).length > 2){
+        if ( errors.isEmpty() ){
             await Task.findByIdAndUpdate(req.params.id, { title: editTaskTitle, description: editTaskDescription });
             res.redirect('/');
         } else {
-            const error = 'Make segure that the title and the description are longer than 2 caracters';
             const loggedUser = req.session.user
             const userTasks = await Task.find({userId: loggedUser._id})
-            res.render('./web/home', {userTasks, error});
+            res.render('./web/home', { userTasks, errors: errors.errors });
         }        
 
     },

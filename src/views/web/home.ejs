@@ -1,12 +1,14 @@
 <%- include ('../partials/head') %> 
     <%- include ('../partials/navbar') %>
-    <% if (typeof error != 'undefined' && error.length > 0) { %>        
-        <div class="alert alert-danger alert-dismissible fade show text-center w-50 mt-2 mx-auto" role="alert">
-            <%= error %>
+    <% if ( typeof errors != 'undefined' ) { %>        
+        <ul class="alert alert-danger alert-dismissible fade show text-center w-50 mt-2 mx-auto" role="alert">
+            <% errors.forEach(error => { %>
+            <li><%= error.msg %></li>
+            <% }) %>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
-        </div>
+        </ul>
     <% } %>
     <% if (typeof success != 'undefined' && success.length > 0) { %>        
         <div class="alert alert-success alert-dismissible fade show text-center w-50 mt-2 mx-auto" role="alert">

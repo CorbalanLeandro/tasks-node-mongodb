@@ -1,42 +1,36 @@
+const path = require('path');
 const bcryptjs = require('bcryptjs');
-const User = require('../models/User');
+const User = require(path.resolve(__dirname + '../../models/User'));
+const { validationResult } = require('express-validator');
 
 module.exports = {
 
     create: async (req, res) => {
 
-        const { userName, firstName, lastName, email, password, confirmPassword } = req.body;
-        const emailRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-        const usersInDb = await User.find();
-
-        if ((userName.trim()).length > 2 && (firstName.trim()).length > 2 && (lastName.trim()).length > 2 && password == confirmPassword && (password.trim()).length >= 8 && emailRegex.test(email)) {
-             const userToMatch = usersInDb.find((user) => { if (user.userName == userName.trim() || user.email == email) { return user; } });
-            if (!userToMatch) {
-                const user = new User(req.body);
-                user.password = bcryptjs.hashSync(req.body.password, 10);//hashing password
-                await user.save();
-                const success = 'Sign up successfully';
-                res.render('./web/home', { success });
-            } else {
-                const error = 'There was an error on the registration';
-                res.render('./web/home', { error });
-            }
+        const errors = validationResult(req);
+        const emailRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;        
+        if ( errors.isEmpty() ) {             
+            const user = new User(req.body);
+            user.password = bcryptjs.hashSync(req.body.password, 10);//hashing password
+            await user.save();
+            const success = 'Sign up successfully';
+            res.render('./web/home', { success });
         } else {
-            const error = 'There was an error on the registration';
-            res.render('./web/home', { error });
+            res.render('./web/home', { errors: errors.errors });
         }
     },
     singIn: async (req, res) => {
 
-        const { userOrEmail } = req.body; //get the string from the form
-        const userToLogin = await User.findOne({
-            $or:
-                [
-                    { userName: new RegExp(`^${userOrEmail}$`, 'i') },
-                    { email: new RegExp(`^${userOrEmail}$`, 'i') },
-                ],
-        });
-        if (userToLogin && bcryptjs.compareSync(req.body.signInPassword, userToLogin.password)) {
+        const errors = validationResult(req);
+        if( errors.isEmpty() ) {
+            const { userOrEmail } = req.body; //get the string from the form
+            const userToLogin = await User.findOne({
+                $or:
+                    [
+                        { userName: new RegExp(`^${userOrEmail}$`, 'i') },
+                        { email: new RegExp(`^${userOrEmail}$`, 'i') },
+                    ],
+            });        
             userToLogin.password = null;
             req.session.user = userToLogin;
             if (req.body.rememberme) {
@@ -44,8 +38,7 @@ module.exports = {
             }
             res.redirect('/');
         } else {
-            const error = 'Non-existent user or invalid password';
-            res.render('./web/home', { error });
+            res.render('./web/home', { errors: errors.errors });
         }
 
     },

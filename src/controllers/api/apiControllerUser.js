@@ -1,5 +1,6 @@
+const path = require('path');
 const bcryptjs = require('bcryptjs');
-const User = require('../../models/User');
+const User = require(path.resolve(__dirname + '../../../models/User'));
 
 module.exports = {
     list: async ( req, res) =>{

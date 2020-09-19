@@ -1,5 +1,3 @@
-
-
 window.addEventListener('load', ()=>{
 
     //Seleccting elements
@@ -98,7 +96,6 @@ window.addEventListener('load', ()=>{
                     deleteTaskForms[i].submit()
                 }                
             }
-        })
-        
+        })        
     }
 })

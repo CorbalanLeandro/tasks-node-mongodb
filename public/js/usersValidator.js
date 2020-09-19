@@ -18,7 +18,8 @@ window.addEventListener('load', async ()=>{
 
     //Regular expresions
     const emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
-    
+    const noSpacesRegex = /\s/g
+
     //Getting users from data base
     async function fetchUsers () {
         const response = await fetch('/api/users/list');
@@ -69,16 +70,19 @@ window.addEventListener('load', async ()=>{
     }
     function userNameHandler (){
         let userNameError = null;
-        if ( (userName.value.trim()).length < 2 ){
+        if ( noSpacesRegex.test(userName.value) ) {
+            userNameError = 'The user name cannot contains spaces';
+        } else if ( userName.value.length <= 1 ){
             userNameError = 'The user name must be longer than 2 characters'
-        } else if ( (userName.value.trim()).length > 2 && (userName.value.trim()).length < 15 ) {
+        } else if ( userName.value.length >= 2 && userName.value.length <= 15 ) {
             const userToMatch = usersInDb.find( user => user == userName.value.toLowerCase() );
             if ( userToMatch ) {
                 userNameError = `This user name is already in use`;
-            }            
-        } else if ( (userName.value.trim()).length > 15 ){
+            }
+        } else if ( userName.value.length >= 15 ) {
             userNameError = 'The user name must be shorter than 15 characters';
-        }
+        } 
+
         if ( userNameError ) {            
             userName.classList.add('is-invalid');
             userNameErrorDiv.innerText = userNameError;
@@ -185,8 +189,8 @@ window.addEventListener('load', () => {
     //Function        
     async function signOutBtnHandler (event) {
         event.preventDefault()
-        const answer = await swal({title: 'Are you sure you want to log out?', dangerMode: true, buttons: true, icon: 'warning' });
-        if (answer) {
+        const answer = await swal({ title: 'Are you sure you want to log out?', dangerMode: true, buttons: true, icon: 'warning' });
+        if ( answer ) {
             window.location.href = 'http://localhost:3000/users/logOut'
         }
     }
