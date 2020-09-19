@@ -3,14 +3,14 @@ const Task = require('../models/Task');
 module.exports = {
     create: async (req, res) => {
 
-        const { title, description } = req.body;
-        if ((title.trim()).length > 2 && (description.trim()).length > 2){
-            let newTask = new Task(req.body);  
+        const { addTaskTitle, addTaskDescription } = req.body;
+        if ((addTaskTitle.trim()).length > 2 && (addTaskDescription.trim()).length > 2){
+            const newTask = new Task({ title: addTaskTitle, description: addTaskDescription });  
             newTask.userId = req.params.userId;      
             await newTask.save(err => console.error(err));
             res.redirect('/');
         } else {
-            let error = 'Make segure that the title and the description are longer than 2 caracters';
+            const error = 'Make segure that the title and the description are longer than 2 caracters';
             const loggedUser = req.session.user
             const userTasks = await Task.find({userId: loggedUser._id})
             res.render('./web/home', {userTasks, error});
@@ -27,12 +27,12 @@ module.exports = {
     },
     update: async (req, res) => {
 
-        const { editTitle, editDescription } = req.body;
-        if ((editTitle.trim()).length > 2 && (editDescription.trim()).length > 2){
-            await Task.findByIdAndUpdate(req.params.id, { title: editTitle, description: editDescription });
+        const { editTaskTitle, editTaskDescription } = req.body;
+        if ((editTaskTitle.trim()).length > 2 && (editTaskDescription.trim()).length > 2){
+            await Task.findByIdAndUpdate(req.params.id, { title: editTaskTitle, description: editTaskDescription });
             res.redirect('/');
         } else {
-            let error = 'Make segure that the title and the description are longer than 2 caracters';
+            const error = 'Make segure that the title and the description are longer than 2 caracters';
             const loggedUser = req.session.user
             const userTasks = await Task.find({userId: loggedUser._id})
             res.render('./web/home', {userTasks, error});

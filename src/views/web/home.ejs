@@ -7,7 +7,15 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-    <% } %>    
+    <% } %>
+    <% if (typeof success != 'undefined' && success.length > 0) { %>        
+        <div class="alert alert-success alert-dismissible fade show text-center w-50 mt-2 mx-auto" role="alert">
+            <%= success %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    <% } %>  
     <main class="container mt-3">
         <section class="row m-2">
             <% if (user) { %>
@@ -16,8 +24,12 @@
                     <h3 class="p-1">New Task</h3>
                 </div>
                 <form class="addTaskForm" action="/tasks/addTask/<%= user._id %> " method="POST">
-                    <input class="form-control mb-1" type="text" name="title" id="" placeholder="Write the new task title">
-                    <textarea class="form-control mb-1" name="description" id="" cols="30" rows="5" placeholder="Write the task description"></textarea>
+                    <div class="text-danger" id="newTaskTitleError">
+                    </div>
+                    <input class="form-control mb-1" type="text" name="addTaskTitle" id="" placeholder="Write the new task title">
+                    <div class="text-danger" id="newTaskDescriptionError">
+                    </div>
+                    <textarea class="form-control mb-1" name="addTaskDescription" id="" cols="30" rows="5" placeholder="Write the task description"></textarea>
                     <button class="btn border border-light bg-tomato btn-block text-white" type="submit">Save</button>
                 </form>
             </div>
@@ -47,14 +59,18 @@
                                         <i class="fas fa-pen-square"></i>
                                     </button>
                                     <div class="modal fade" id="modal<%= i %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
+                                        <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content p-2 bg-gradient">
                                                 <div class="card-title text-light border border-light rounded bg-tomato">
                                                     <h3 class="p-1">Editting Task</h3>
                                                 </div>
                                                 <form class="editTaskForm" action="/tasks/editTask/<%= userTasks[i]._id %>?_method=PUT" method="POST">
-                                                    <input class="form-control mb-1" type="text" name="editTitle" id="" value="<%= userTasks[i].title %>">
-                                                    <textarea class="form-control mb-1" name="editDescription" id="" cols="30" rows="5"><%= userTasks[i].description %></textarea>
+                                                    <div class="text-danger editTaskTitleError">
+                                                    </div>
+                                                    <input class="form-control mb-1 editTitleInput" type="text" name="editTaskTitle" value="<%= userTasks[i].title %>">
+                                                    <div class="text-danger editTaskDescriptionError">
+                                                    </div>
+                                                    <textarea class="form-control mb-1 editDescriptionInput" name="editTaskDescription" cols="30" rows="5"><%= userTasks[i].description %></textarea>
                                                     <button class="btn border border-light bg-tomato btn-block text-white" type="submit">Save</button>
                                                 </form>
                                             </div>

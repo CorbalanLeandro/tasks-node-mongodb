@@ -7,12 +7,12 @@ module.exports = async (req,res,next) => {
         res.locals.user = req.session.user;
         return next();
     } else if(req.cookies.email){
-        let userLogueado = await User.findOne({email:req.cookies.email});
-        userLogueado.password = null;
+        let useOnCookies = await User.findOne({email:req.cookies.email});
+        useOnCookies.password = null;
         req.session.user = undefined;
         res.locals.user = undefined;
-        req.session.user = userLogueado;
-        res.locals.user = userLogueado;
+        req.session.user = useOnCookies;
+        res.locals.user = useOnCookies;
         return next();
     }else {
         next();
