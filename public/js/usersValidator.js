@@ -32,9 +32,7 @@ window.addEventListener('load', async ()=>{
     const usersInDb = dataInDbInLowerCase.filter(el => !emailRegex.test(el));
 
     //Events
-    userName.addEventListener('keyup', userNameHandler);
     userName.addEventListener('focusout', userNameHandler);
-    email.addEventListener('keyup', emailHandler);
     email.addEventListener('focusout', emailHandler);
     signInForm.addEventListener('submit', signInFormHandler);
     signUpForm.addEventListener('submit', signUpFormHandler);
