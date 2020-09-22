@@ -25,7 +25,7 @@ app.use(methodOverride('_method'));
 
 
 //Connecting to db
-mongoose.connect('mongodb://localhost/tasks-node-mongodb', {useNewUrlParser: true, useUnifiedTopology:true, useCreateIndex: true})
+mongoose.connect('mongodb://localhost:27017/tasks-node-mongodb', {useNewUrlParser: true, useUnifiedTopology:true, useCreateIndex: true})
     .then(db => console.log('Database connected'))
     .catch(err => console.error(err))
 

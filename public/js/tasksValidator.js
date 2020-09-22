@@ -18,17 +18,21 @@ window.addEventListener('load', ()=>{
     addTaskForm.addEventListener('submit', addTaskFormHandler);
 
     //Functions
+    let checkMinLength = (value, minLength) => (value.trim()).length < minLength;
+    let checkMaxLength = (value, maxLength) => value.length > maxLength;
+
+    //Handlers
     function addTaskFormHandler (event) {
         let titleError = null;
         let descriptionError = null;
-        if ( (addTaskTitle.value.trim()).length < 2 ) {
+        if ( checkMinLength(addTaskTitle.value, 2) ) {
             titleError = 'The task title must be longer than 2 characters';
-        } else if ( addTaskTitle.value.length > 15 ) {
+        } else if ( checkMaxLength(addTaskTitle, 15) ) {
             titleError = 'The task title must be shorter than 15 characters';
         }
-        if ( (addTaskDescription.value.trim()).length < 2 ) {
+        if ( checkMinLength(addTaskDescription.value, 2) ) {
             descriptionError = 'The task description must be longer than 2 characters';
-        } else if ( addTaskDescription.value.length > 150 ) {
+        } else if ( checkMaxLength(addTaskDescription, 150) ) {
             descriptionError = 'The task description must be shorter than 150 characters';
         }
         if ( titleError ) {
@@ -55,14 +59,14 @@ window.addEventListener('load', ()=>{
         editTaskForms[i].addEventListener('submit', function (event) {
             let titleError = null;
             let descriptionError = null;
-            if ( (editTitleInputs[i].value.trim()).length < 2 ) {
+            if ( checkMinLength(editTitleInputs[i].value, 2) ) {
                 titleError = 'The task title must be longer than 2 characters';
-            } else if( editTitleInputs[i].value.length > 15 ) {
+            } else if( checkMaxLength(editTitleInputs[i].value, 15) ) {
                 titleError = 'The task title must be shorter than 15 characters';
             }
-            if ( (editDescriptionInputs[i].value.trim()).length < 2 ) {
+            if ( checkMinLength(editDescriptionInputs[i].value, 2) ) {
                 descriptionError = 'The task description must be longer than 2 characters';
-            } else if ( editDescriptionInputs[i].value.length > 150 ) {
+            } else if ( checkMaxLength(editDescriptionInputs[i].value, 150) ) {
                 descriptionError = 'The task description must be shorter than 150 characters';
             }
             if ( titleError ) {

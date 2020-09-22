@@ -17,8 +17,8 @@ window.addEventListener('load', async ()=>{
     const { userName, firstName, lastName, email, password, confirmPassword } = signUpForm.elements;
 
     //Regular expresions
-    const emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
-    const noSpacesRegex = /\s/g
+    const emailRegex = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+    const noSpacesRegex = /\s/
 
     //Getting users from data base
     async function fetchUsers () {
@@ -32,24 +32,35 @@ window.addEventListener('load', async ()=>{
     const usersInDb = dataInDbInLowerCase.filter(el => !emailRegex.test(el));
 
     //Events
-    userName.addEventListener('focusout', userNameHandler);
-    email.addEventListener('focusout', emailHandler);
+    userName.addEventListener('keyup', userNameHandler);
+    userName.addEventListener('input', userNameHandler);
+    email.addEventListener('keyup', emailHandler);
+    email.addEventListener('input', emailHandler);
     signInForm.addEventListener('submit', signInFormHandler);
     signUpForm.addEventListener('submit', signUpFormHandler);
 
     //Functions
+    let checkRegex = (reg, value) => reg instanceof RegExp ? reg.test(value) : console.error('invalid regex');
+    let checkInDb = (array, value) => array.find(element => element == value.toLowerCase());
+    let checkMinLength = (value, minLength) => value.length < minLength;
+    let checkMaxLength = (value, maxLength) => value.length > maxLength;
+
+    //Handlers
     function signInFormHandler (event) {
         let userOrEmailError = null;
         let signInPasswordError = null;
-        if ( (userOrEmail.value.trim()).length < 2 ) {
+        if ( checkRegex(noSpacesRegex, userOrEmail.value) ) {
+            userOrEmailError = 'This field cannot contain spaces';
+        } else if ( checkMinLength(userOrEmail.value, 2) ) {
             userOrEmailError = 'The user name or email must be longer than 2 characters';
         }
-        if ( (signInPassword.value.trim()).length < 8 ) {
+        if ( checkMinLength(signInPassword.value, 8) ) {
             signInPasswordError = 'The password must be longer than 8 characters';
         }
         if (userOrEmailError) {
             event.preventDefault();
             userOrEmail.classList.add('is-invalid');
+            userOrEmail.classList.remove('is-valid');
             userOrEmailErrorDiv.innerText = userOrEmailError;
         } else {
             userOrEmailErrorDiv.innerText = '';
@@ -59,6 +70,7 @@ window.addEventListener('load', async ()=>{
         if (signInPasswordError) {
             event.preventDefault();
             signInPassword.classList.add('is-invalid');
+            userOrEmail.classList.remove('is-valid');
             signInPasswordErrorDiv.innerText = signInPasswordError;
         } else {
             signInPasswordErrorDiv.innerText = '';
@@ -68,21 +80,21 @@ window.addEventListener('load', async ()=>{
     }
     function userNameHandler (){
         let userNameError = null;
-        if ( noSpacesRegex.test(userName.value) ) {
-            userNameError = 'The user name cannot contains spaces';
-        } else if ( userName.value.length <= 1 ){
+        if ( checkRegex(noSpacesRegex, userName.value) ) {
+            userNameError = 'The user name cannot contains spaces';          
+        } else if ( checkMinLength(userName.value, 2) ){
             userNameError = 'The user name must be longer than 2 characters'
-        } else if ( userName.value.length >= 2 && userName.value.length <= 15 ) {
-            const userToMatch = usersInDb.find( user => user == userName.value.toLowerCase() );
-            if ( userToMatch ) {
+        } else if ( !checkMinLength(userName.value, 2) && !checkMaxLength(userName.value, 15) ) {
+            if ( checkInDb(usersInDb, userName.value) ) {
                 userNameError = `This user name is already in use`;
             }
-        } else if ( userName.value.length >= 15 ) {
+        } else if ( checkMaxLength(userName.value, 15) ) {
             userNameError = 'The user name must be shorter than 15 characters';
         } 
 
         if ( userNameError ) {            
             userName.classList.add('is-invalid');
+            userName.classList.remove('is-valid');
             userNameErrorDiv.innerText = userNameError;
             return false;
         } else {
@@ -95,11 +107,12 @@ window.addEventListener('load', async ()=>{
     function emailHandler (){
         let emailError = null; 
         const emailToMatch = emailsInDb.find( user => user == email.value.toLowerCase() );
-        if ( emailToMatch ) {
+        if ( !checkRegex(emailRegex, email.value) ) {
+            emailError = 'Must be a valid email';        
+        } else if ( checkInDb(emailsInDb, email.value) ) {
             emailError = 'This email is already in use';
-        } else if ( !emailRegex.test(email.value) ) {
-            emailError = 'Must be a valid email';
         }
+
         if ( emailError ) {
             email.classList.add('is-invalid');
             emailErrorDiv.innerText = emailError;
@@ -116,20 +129,20 @@ window.addEventListener('load', async ()=>{
         let lastNameError = null;
         let passwordError = null;
         let confirmPasswordError = null;
-        if ( (firstName.value.trim()).length < 2) {
+        if ( checkMinLength((firstName.value).trim(), 2) ) {
             firstNameError = 'The first must be longer than 2 characters';
-        } else if ( firstName.value.length > 50) {
+        } else if ( checkMaxLength(firstName.value, 50)) {
             firstNameError = 'The first name must be shorter than 50 characters';
         }
-        if ( (lastName.value.trim()).length < 2) {
+        if ( checkMinLength((lastName.value).trim(), 2) ) {
             lastNameError = 'The last name must be longer than 2 characters';
-        } else if ( lastName.value.length > 50) {
+        } else if ( checkMaxLength(lastName.value, 2)) {
             lastNameError = 'The last name must be shorter than 50 characters';
         }
-        if ( (password.value.trim()).length < 8) {
+        if ( checkMinLength(password.value, 8) ) {
             passwordError = 'The password must be longer than 8 characters';
         }
-        if ( (confirmPassword.value.trim()).length == 0 ) {
+        if ( checkMinLength(confirmPassword.value, 1) ) {
             confirmPasswordError = `This field can't be empty`;
         } else if ( password.value != confirmPassword.value ) {
             confirmPasswordError = `The passwords doesn't match`;
