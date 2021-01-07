@@ -6,8 +6,8 @@ const usersValidator = require(path.resolve(__dirname +'../../middlewares/route/
 //Importing controller
 const controllerUser = require(path.resolve(__dirname + '../../controllers/controllerUser'));
 
-router.post('/singUp', usersValidator.signUp, controllerUser.create);
-router.post('/singIn', usersValidator.signIn, controllerUser.singIn);
+router.post('/signUp', usersValidator.signUp, controllerUser.create);
+router.post('/signIn', usersValidator.signIn, controllerUser.signIn);
 router.get('/logOut', controllerUser.logOut);
 
 module.exports = router;

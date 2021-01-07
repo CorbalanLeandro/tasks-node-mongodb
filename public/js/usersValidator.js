@@ -17,7 +17,7 @@ window.addEventListener('load', async ()=>{
     const { userName, firstName, lastName, email, password, confirmPassword } = signUpForm.elements;
 
     //Regular expresions
-    const emailRegex = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+    const emailRegex = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i
     const noSpacesRegex = /\s/
 
     //Getting users from data base
@@ -136,7 +136,7 @@ window.addEventListener('load', async ()=>{
         }
         if ( checkMinLength((lastName.value).trim(), 2) ) {
             lastNameError = 'The last name must be longer than 2 characters';
-        } else if ( checkMaxLength(lastName.value, 2)) {
+        } else if ( checkMaxLength(lastName.value, 50)) {
             lastNameError = 'The last name must be shorter than 50 characters';
         }
         if ( checkMinLength(password.value, 8) ) {
@@ -202,7 +202,7 @@ window.addEventListener('load', () => {
         event.preventDefault()
         const answer = await swal({ title: 'Are you sure you want to log out?', dangerMode: true, buttons: true, icon: 'warning' });
         if ( answer ) {
-            window.location.href = 'http://localhost:3000/users/logOut'
+            window.location.href = 'https://todolist-nodejs-mongodb-mvc.herokuapp.com/users/logOut'
         }
     }
 })

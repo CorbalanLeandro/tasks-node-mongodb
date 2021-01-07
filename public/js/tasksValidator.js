@@ -27,12 +27,12 @@ window.addEventListener('load', ()=>{
         let descriptionError = null;
         if ( checkMinLength(addTaskTitle.value, 2) ) {
             titleError = 'The task title must be longer than 2 characters';
-        } else if ( checkMaxLength(addTaskTitle, 15) ) {
+        } else if ( checkMaxLength(addTaskTitle.value, 15) ) {
             titleError = 'The task title must be shorter than 15 characters';
         }
         if ( checkMinLength(addTaskDescription.value, 2) ) {
             descriptionError = 'The task description must be longer than 2 characters';
-        } else if ( checkMaxLength(addTaskDescription, 150) ) {
+        } else if ( checkMaxLength(addTaskDescription.value, 150) ) {
             descriptionError = 'The task description must be shorter than 150 characters';
         }
         if ( titleError ) {

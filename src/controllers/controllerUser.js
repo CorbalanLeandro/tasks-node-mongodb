@@ -7,8 +7,7 @@ module.exports = {
 
     create: async (req, res) => {
 
-        const errors = validationResult(req);
-        const emailRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;        
+        const errors = validationResult(req);       
         if ( errors.isEmpty() ) {             
             const user = new User(req.body);
             user.password = bcryptjs.hashSync(req.body.password, 10);//hashing password
@@ -19,7 +18,7 @@ module.exports = {
             res.render('./web/home', { errors: errors.errors });
         }
     },
-    singIn: async (req, res) => {
+    signIn: async (req, res) => {
 
         const errors = validationResult(req);
         if( errors.isEmpty() ) {
