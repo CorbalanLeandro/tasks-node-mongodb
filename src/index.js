@@ -1,7 +1,5 @@
-if (process.env.NODE_ENV === 'development') {
-    // eslint-disable-next-line global-require
-    require('dotenv').config();
-}
+// eslint-disable-next-line global-require
+require('dotenv').config();
 
 const morgan = require('morgan');
 const path = require('path');
@@ -30,9 +28,9 @@ app.use(methodOverride('_method'));
 
 
 //Connecting to db
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology:true, useCreateIndex: true })
-.then(db => console.log('Database connected'))
-.catch(err => console.error(err))
+mongoose.connect(process.env.MONGODB_URI)
+    .then(db => console.log('Database connected'))
+    .catch(err => console.error(err))
 
 //Importing routes
 const webRoutes = require('./routes/webRoutes');
