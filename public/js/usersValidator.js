@@ -5,7 +5,7 @@ window.addEventListener('load', async ()=>{
     const signUpForm = document.querySelector('.signUpForm');    
     const userOrEmailErrorDiv = document.getElementById('userOrEmailError');
     const signInPasswordErrorDiv = document.getElementById('signInPasswordError');
-    const userNameErrorDiv = document.getElementById('userNameError');
+    const usernameErrorDiv = document.getElementById('usernameError');
     const firstNameErrorDiv = document.getElementById('firstNameError');
     const lastNameErrorDiv = document.getElementById('lastNameError');
     const emailErrorDiv = document.getElementById('emailError');
@@ -14,7 +14,7 @@ window.addEventListener('load', async ()=>{
     
     //Destructuring   
     const { userOrEmail , signInPassword } = signInForm.elements;
-    const { userName, firstName, lastName, email, password, confirmPassword } = signUpForm.elements;
+    const { username, firstName, lastName, email, password, confirmPassword } = signUpForm.elements;
 
     //Regular expresions
     const emailRegex = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i
@@ -32,8 +32,8 @@ window.addEventListener('load', async ()=>{
     const usersInDb = dataInDbInLowerCase.filter(el => !emailRegex.test(el));
 
     //Events
-    userName.addEventListener('keyup', userNameHandler);
-    userName.addEventListener('input', userNameHandler);
+    username.addEventListener('keyup', usernameHandler);
+    username.addEventListener('input', usernameHandler);
     email.addEventListener('keyup', emailHandler);
     email.addEventListener('input', emailHandler);
     signInForm.addEventListener('submit', signInFormHandler);
@@ -52,7 +52,7 @@ window.addEventListener('load', async ()=>{
         if ( checkRegex(noSpacesRegex, userOrEmail.value) ) {
             userOrEmailError = 'This field cannot contain spaces';
         } else if ( checkMinLength(userOrEmail.value, 2) ) {
-            userOrEmailError = 'The user name or email must be longer than 2 characters';
+            userOrEmailError = 'The username or email must be longer than 2 characters';
         }
         if ( checkMinLength(signInPassword.value, 8) ) {
             signInPasswordError = 'The password must be longer than 8 characters';
@@ -78,29 +78,29 @@ window.addEventListener('load', async ()=>{
             signInPassword.classList.add('is-valid');
         }
     }
-    function userNameHandler (){
-        let userNameError = null;
-        if ( checkRegex(noSpacesRegex, userName.value) ) {
-            userNameError = 'The user name cannot contains spaces';          
-        } else if ( checkMinLength(userName.value, 2) ){
-            userNameError = 'The user name must be longer than 2 characters'
-        } else if ( !checkMinLength(userName.value, 2) && !checkMaxLength(userName.value, 15) ) {
-            if ( checkInDb(usersInDb, userName.value) ) {
-                userNameError = `This user name is already in use`;
+    function usernameHandler (){
+        let usernameError = null;
+        if ( checkRegex(noSpacesRegex, username.value) ) {
+            usernameError = 'The username cannot contains spaces';          
+        } else if ( checkMinLength(username.value, 2) ){
+            usernameError = 'The username must be longer than 2 characters'
+        } else if ( !checkMinLength(username.value, 2) && !checkMaxLength(username.value, 15) ) {
+            if ( checkInDb(usersInDb, username.value) ) {
+                usernameError = `This username is already in use`;
             }
-        } else if ( checkMaxLength(userName.value, 15) ) {
-            userNameError = 'The user name must be shorter than 15 characters';
+        } else if ( checkMaxLength(username.value, 15) ) {
+            usernameError = 'The username must be shorter than 15 characters';
         } 
 
-        if ( userNameError ) {            
-            userName.classList.add('is-invalid');
-            userName.classList.remove('is-valid');
-            userNameErrorDiv.innerText = userNameError;
+        if ( usernameError ) {            
+            username.classList.add('is-invalid');
+            username.classList.remove('is-valid');
+            usernameErrorDiv.innerText = usernameError;
             return false;
         } else {
-            userNameErrorDiv.innerText = '';
-            userName.classList.remove('is-invalid');
-            userName.classList.add('is-valid');
+            usernameErrorDiv.innerText = '';
+            username.classList.remove('is-invalid');
+            username.classList.add('is-valid');
             return true;
         }        
     }
@@ -184,7 +184,7 @@ window.addEventListener('load', async ()=>{
             confirmPassword.classList.remove('is-invalid');
             confirmPassword.classList.add('is-valid');
         }
-        if ( !emailHandler() && !userNameHandler() ) {
+        if ( !emailHandler() && !usernameHandler() ) {
             event.preventDefault();
         }
     }
@@ -202,7 +202,10 @@ window.addEventListener('load', () => {
         event.preventDefault()
         const answer = await swal({ title: 'Are you sure you want to log out?', dangerMode: true, buttons: true, icon: 'warning' });
         if ( answer ) {
-            window.location.href = 'https://todolist-nodejs-mongodb-mvc.herokuapp.com/users/logOut'
+            // Get the current baseUrl dynamically
+            const currentBaseUrl = window.location.origin;
+            const logoutUrl = `${currentBaseUrl}/users/logOut`;
+            window.location.href = logoutUrl;
         }
     }
 })

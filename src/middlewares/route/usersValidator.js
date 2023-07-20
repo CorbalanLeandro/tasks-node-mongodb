@@ -2,7 +2,6 @@ const path = require('path');
 const User = require(path.resolve(__dirname + '../../../models/User'));
 const bcryptjs = require('bcryptjs');
 const { check } = require('express-validator');
-const { truncate } = require('fs');
 
 module.exports = {
     signIn: [
@@ -11,7 +10,7 @@ module.exports = {
             const userToLogin = await User.findOne({
                 $or:
                     [
-                        { userName: new RegExp(`^${value}$`, 'i') },
+                        { username: new RegExp(`^${value}$`, 'i') },
                         { email: new RegExp(`^${value}$`, 'i') },
                     ],
             });
@@ -22,19 +21,19 @@ module.exports = {
         })
     ],
     signUp: [
-        check('userName')
+        check('username')
             .isLength({ min: 2 }).withMessage('The username must have al least 2 characters')
             .isLength({ max: 15 }).withMessage('The username must shorter than 15 characters')
             .custom( value =>{
-                const userNameRegex = /^\w*$/g
-                if( userNameRegex.test(value) ) {
+                const usernameRegex = /^\w*$/g
+                if( usernameRegex.test(value) ) {
                     return true
                 } else {
                     return false
                 }
             }).withMessage('The username must be alphanumeric or underscore and no spaces')
             .custom( async value => {
-                const userToSignUp = await User.findOne({ userName: new RegExp(`^${value}$`, 'i') })
+                const userToSignUp = await User.findOne({ username: new RegExp(`^${value}$`, 'i') })
                 if( userToSignUp ) {
                     return Promise.reject('The username is already in use');
                 } else {

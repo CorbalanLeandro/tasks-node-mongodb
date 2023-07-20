@@ -26,7 +26,7 @@ module.exports = {
             const userToLogin = await User.findOne({
                 $or:
                     [
-                        { userName: new RegExp(`^${userOrEmail}$`, 'i') },
+                        { username: new RegExp(`^${userOrEmail}$`, 'i') },
                         { email: new RegExp(`^${userOrEmail}$`, 'i') },
                     ],
             });        

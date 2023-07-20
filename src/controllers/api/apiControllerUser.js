@@ -8,7 +8,7 @@ module.exports = {
         const usersInDb = await User.find();
         let usersToMatch = []
         usersInDb.forEach(user => {
-            usersToMatch.push(user.userName, user.email);
+            usersToMatch.push(user.username, user.email);
         })
         let response = {
             meta:{
